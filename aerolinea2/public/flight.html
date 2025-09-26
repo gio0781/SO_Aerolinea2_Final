@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Detalle de Vuelo</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="overflow-x-hidden">
+    <header class="glassmorphism-nav sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 id="title" class="text-2xl font-bold text-gray-800">Vuelo</h1>
+            <div class="flex items-center space-x-2">
+                <a class="neumorphic-button px-5 py-2 font-semibold" href="index.html">← Volver</a>
+                <a id="navMisVuelos" class="neumorphic-button px-5 py-2 font-semibold" href="mis_vuelos.html" style="display: none;">Mis vuelos</a>
+                <a id="navLogout" href="#" class="neumorphic-button px-5 py-2 font-semibold text-red-600" style="display: none;">Cerrar sesión</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section id="detail" class="mb-8 reveal"></section>
+
+        <section class="neumorphic-panel p-6 md:p-8 mb-8 reveal">
+            <h2 class="text-2xl font-bold mb-6">Selección de Asientos</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div>
+                    <label for="ticketCount" class="block mb-2 font-semibold text-gray-700"># de boletos</label>
+                    <input type="number" id="ticketCount" min="1" max="10" value="1" class="w-full neumorphic-input p-3 rounded-xl">
+                </div>
+                <div>
+                    <label for="paymentMethod" class="block mb-2 font-semibold text-gray-700">Método de pago</label>
+                    <select id="paymentMethod" class="w-full neumorphic-input p-3 rounded-xl appearance-none">
+                        <option value="efectivo">Efectivo</option>
+                        <option value="tarjeta">Tarjeta de Crédito/Débito</option>
+                    </select>
+                </div>
+                <div class="self-end">
+                    <button id="btnClear" class="w-full neumorphic-button py-3 font-semibold">Limpiar selección</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="neumorphic-panel-inset p-4">
+                    <h3 class="font-bold text-center mb-2">Primera Clase <span class="badge">$120,000</span></h3>
+                    <div id="gridFirst" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+                </div>
+                <div class="neumorphic-panel-inset p-4">
+                    <h3 class="font-bold text-center mb-2">Clase Turista</h3>
+                    <div class="flex justify-center flex-wrap gap-2 mb-4 text-xs">
+                        <span class="badge">Adulto $65,950</span>
+                        <span class="badge">Niño $60,500</span>
+                        <span class="badge">3ª Edad $50,000</span>
+                    </div>
+                    <div id="gridEco" class="grid grid-cols-4 sm:grid-cols-5 gap-3"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="neumorphic-panel p-6 md:p-8 reveal">
+            <h2 class="text-2xl font-bold mb-4">Carrito de Compra</h2>
+            <div id="cart" class="mb-6"></div>
+            <div class="flex justify-end">
+                <button id="btnCheckout" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-blue-700 transition-colors">Confirmar Compra</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals (Auth, Pay, Receipt) -->
+    <dialog id="authModal">
+        <!-- ... Contenido del modal de autenticación ... -->
+    </dialog>
+    <dialog id="payModal">
+        <!-- ... Contenido del modal de pago ... -->
+    </dialog>
+    <dialog id="receiptModal" class="p-0">
+        <div id="receipt" class="p-8"></div>
+        <form method="dialog" class="text-right p-4 bg-gray-100 rounded-b-2xl">
+            <button class="neumorphic-button py-2 px-6 font-semibold">Cerrar</button>
+        </form>
+    </dialog>
+
+    <script type="module" src="flight.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            function reveal() {
+                document.querySelectorAll(".reveal").forEach(el => {
+                    if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+                        el.classList.add("active");
+                    }
+                });
+            }
+            window.addEventListener("scroll", reveal);
+            reveal();
+        });
+    </script>
+</body>
+</html>
