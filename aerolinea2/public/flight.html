@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detalle de Vuelo</title><link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+/* Estilo base inspirado en Apple y Neumorfismo */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #eef1f5;
+    color: #333;
+}
+
+/* --- Estilos Neumórficos --- */
+.neumorphic-panel {
+    background: #eef1f5;
+    border-radius: 20px;
+    box-shadow: 8px 8px 15px #c5cad1, -8px -8px 15px #ffffff;
+    transition: all 0.3s ease-in-out;
+}
+
+.neumorphic-panel-inset {
+    background: #eef1f5;
+    border-radius: 20px;
+    box-shadow: inset 8px 8px 15px #c5cad1, inset -8px -8px 15px #ffffff;
+}
+
+.neumorphic-button {
+    background: #eef1f5;
+    border-radius: 12px;
+    box-shadow: 6px 6px 12px #c5cad1, -6px -6px 12px #ffffff;
+    transition: all 0.2s ease-in-out;
+}
+
+.neumorphic-button:hover {
+    box-shadow: 4px 4px 8px #c5cad1, -4px -4px 8px #ffffff;
+}
+
+.neumorphic-button:active {
+    box-shadow: inset 4px 4px 8px #c5cad1, inset -4px -4px 8px #ffffff;
+}
+
+.neumorphic-input {
+    background: #eef1f5;
+    border: none;
+    outline: none;
+    box-shadow: inset 5px 5px 10px #c5cad1, inset -5px -5px 10px #ffffff;
+    transition: all 0.3s ease-in-out;
+}
+
+.neumorphic-input:focus {
+    box-shadow: inset 3px 3px 6px #c5cad1, inset -3px -3px 6px #ffffff;
+}
+
+/* --- Estilo inspirado en Apple --- */
+.glassmorphism-nav {
+    background: rgba(238, 241, 245, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* --- Animaciones --- */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in-up { opacity: 0; animation: fadeInUp 0.8s ease-out forwards; }
+
+.reveal {
+    position: relative;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: 1s all ease;
+}
+.reveal.active { transform: translateY(0); opacity: 1; }
+</style>
+
+</head><body>
+<header class="site glassmorphism-nav sticky top-0 z-50"><div class="wrap inner">
+  <h1 id="title">Vuelo</h1><a class="link btn neumorphic-button py-3 px-5 rounded-xl" href="index.html">← Volver</a> · <a id="navMisVuelos" class="link btn neumorphic-button py-3 px-5 rounded-xl" href="mis_vuelos.html">Mis vuelos</a> · <a id="navLogout" href="#">Cerrar sesión</a>
+</div></header>
+<main class="wrap reveal">
+
+    <!-- TOP BANNER -->
+    <section class="relative overflow-hidden rounded-2xl neumorphic-panel p-0 mt-6 reveal">
+      <div class="absolute inset-0">
+        <img src="https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?q=80&w=2070&auto=format&fit=crop" alt="Banner avión" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-b from-black/25 via-black/15 to-transparent"></div>
+      </div>
+      <div class="relative px-8 py-12">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-white drop-shadow-lg">Detalles del vuelo</h1>
+      </div>
+    </section>
+    
+
+  <section class="panel neo neumorphic-panel p-6 reveal" id="detail"></section>
+  <section class="panel neo neumorphic-panel p-6 reveal" id="asientos">
+    <h2>Asientos</h2>
+    <div class="controls">
+      <label># de boletos <input class="neumorphic-input p-3 rounded-xl" type="number" id="ticketCount" min="1" max="10" value="1"></label>
+      <label>Método de pago
+        <select class="neumorphic-input p-3 rounded-xl" id="paymentMethod">
+          <option value="efectivo">Efectivo</option>
+          <option value="tarjeta">Tarjeta</option>
+        </select>
+      </label>
+      <button class="btn neumorphic-button py-3 px-5 rounded-xl" id="btnClear">Limpiar selección</button>
+    </div>
+    <div class="seat-area">
+      <div><h3>Primera (10) <span class="badge">$120,000</span></h3><div id="gridFirst" class="grid"></div></div>
+      <div><h3>Turista (20) <span class="badge">Adulto $65,950 • Niño $60,500 • 3ª Edad $50,000</span></h3><div id="gridEco" class="grid"></div></div>
+    </div>
+  </section>
+  <section class="panel neo neumorphic-panel p-6 reveal">
+    <h2>Carrito</h2>
+    <div id="cart"></div>
+    <div class="right"><button class="btn primary neumorphic-button py-3 px-5 rounded-xl" id="btnCheckout">Confirmar compra</button></div>
+  </section>
+</main>
+
+<dialog id="authModal" class="modal">
+  <form method="dialog" class="authform" id="authForm">
+    <h3 id="authTitle">Iniciar sesión</h3>
+    <label>Email <input class="neumorphic-input p-3 rounded-xl" type="email" id="authEmail" required></label>
+    <label>Contraseña <input class="neumorphic-input p-3 rounded-xl" type="password" id="authPass" minlength="6" required></label>
+    <div id="nameBox" style="display:none"><label>Nombre <input class="neumorphic-input p-3 rounded-xl" type="text" id="authName"></label></div>
+    <menu>
+      <button class="btn neumorphic-button py-3 px-5 rounded-xl" type="button" value="cancel">Cancelar</button>
+      <button class="btn primary neumorphic-button py-3 px-5 rounded-xl" id="authSubmit">Continuar</button>
+    </menu>
+    <p class="mini">Sugerencia: usa 8+ caracteres, una mayúscula y un número.</p>
+    <p class="mini" id="authSwitch">¿No tienes cuenta? <a href="#" id="switchToSignup">Crear una</a></p>
+  </form>
+</dialog>
+
+<dialog id="payModal" class="modal">
+  <form method="dialog" class="payform" id="payForm">
+    <h3>Pago con tarjeta (simulado)</h3>
+    <label>Titular <input class="neumorphic-input p-3 rounded-xl" type="text" id="cardName" required></label>
+    <label>Número <input class="neumorphic-input p-3 rounded-xl" type="text" id="cardNumber" inputmode="numeric" minlength="13" maxlength="19" required></label>
+    <div class="grid2">
+      <label>MM/AA <input class="neumorphic-input p-3 rounded-xl" type="text" id="cardExp" placeholder="MM/AA" required></label>
+      <label>CVV <input class="neumorphic-input p-3 rounded-xl" type="password" id="cardCVV" inputmode="numeric" minlength="3" maxlength="4" required></label>
+    </div>
+    <menu>
+      <button class="btn neumorphic-button py-3 px-5 rounded-xl" type="button" value="cancel">Cancelar</button>
+      <button class="btn primary neumorphic-button py-3 px-5 rounded-xl" id="paySubmit">Pagar</button>
+    </menu>
+  </form>
+</dialog>
+
+<dialog id="receiptModal" class="modal">
+  <div id="receipt" class="panel neo neumorphic-panel p-6"></div>
+  <form method="dialog" class="right" style="padding:12px"><button class="btn neumorphic-button py-3 px-5 rounded-xl">Cerrar</button></form>
+</dialog>
+
+<script type="module" src="flight.js"></script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    function reveal() {
+        document.querySelectorAll(".reveal").forEach(el => {
+            const windowHeight = window.innerHeight;
+            const elementTop = el.getBoundingClientRect().top;
+            if (elementTop < windowHeight - 150) {
+                el.classList.add("active");
+            }
+        });
+    }
+    window.addEventListener("scroll", reveal);
+    reveal();
+});
+</script>
+
+</body></html>
